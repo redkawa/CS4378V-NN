@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 #Using sigmoid as activation function
 class Neu_Net( object ):
@@ -31,3 +32,7 @@ class Neu_Net( object ):
 
 		#apply sigmoid to matrix
 		return 1/( 1 + np.exp( -z ) )
+
+
+NN = Neu_Net()
+print( NN.weight_2)
