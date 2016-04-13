@@ -1,14 +1,16 @@
-# Test
+import random
 
-#oinsoirfnosrnf
 
-i = 9
-asdfjiasodfj
-thisss
-<<<<<<< HEAD
-Sergioio
+class Neu_Net( object ):
+	def __init__(self):
 
-=======
-fawo;eifjawoefjafowie
-pusshhh
->>>>>>> e9aff10b710bfa0325d60a48e6499ab3b506077d
+		#Number of nodes for each layer
+		self.input = 900
+		self.hidden = 4
+		self.output = 2
+
+		#Initializing weights. Since we have 3 layes, we have 2 matrices of weights. 
+		self.weight_1 = np.random.randn( self.input , self.hidden )
+		self.weight_2 = np.random.randn( self.hidden , self.output )
+
+
