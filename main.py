@@ -31,8 +31,9 @@ class Neu_Net( object ):
 	def sigmoid( self, k ):
 
 		#apply sigmoid to matrix
-		return 1/( 1 + np.exp( -z ) )
+		return 1/( 1 + np.exp( -k ) )
 
 
 NN = Neu_Net()
-print( NN.weight_2)
+print( NN.weight_2 )
+print( NN.sigmoid( NN.weight_2 ) )
