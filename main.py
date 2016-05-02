@@ -1,9 +1,9 @@
 
 import random
 import numpy as np
-import numpy as np
 import cv2
 import tensorflow as tf
+
 #Using sigmoid as activation function
 class Neu_Net( object ):
 	#Initialize function
