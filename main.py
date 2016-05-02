@@ -1,9 +1,7 @@
-# Test
+import numpy as np
+import cv2
+import tensorflow as tf
 
-#oinsoirfnosrnf
+i = 5
 
-i = 9
-asdfjiasodfj
-thisss
-fawo;eifjawoefjafowie
-pusshhh
+sample_img = cv2.imread('/Users/admin/Desktop/unspecified.png')
