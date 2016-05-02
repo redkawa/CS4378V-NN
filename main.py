@@ -1,8 +1,13 @@
-
+from scipy import ndimage as ndi
+import matplotlib
+import os.path
+import skimage as skimage
+from skimage import color, io
+from skimage.transform import resize
 import random
 import numpy as np
-import cv2
 import tensorflow as tf
+import imageProcessing
 
 #Using sigmoid as activation function
 class Neu_Net( object ):
@@ -37,7 +42,7 @@ class Neu_Net( object ):
 
 
 NN = Neu_Net()
-print( NN.weight_2 )
-print( NN.sigmoid( NN.weight_2 ) )
+#print( NN.weight_2 )
+#print( NN.sigmoid( NN.weight_2 ) )
 
-sample_img = cv2.imread('/Users/admin/Desktop/unspecified.png')
+imageProcessing.processImages()
