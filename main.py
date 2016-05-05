@@ -8,6 +8,7 @@ import random
 import numpy as np
 import tensorflow as tf
 import imageProcessing
+import time
 
 #Using sigmoid as activation function
 class Neu_Net( object ):
@@ -44,5 +45,8 @@ class Neu_Net( object ):
 NN = Neu_Net()
 #print( NN.weight_2 )
 #print( NN.sigmoid( NN.weight_2 ) )
-
-imageProcessing.processImages()
+start = time.time()
+imageProcessing.setup()
+end = time.time()
+print("Time it took (in seconds): " + str(end - start))
+#imageProcessing.printImageAsGrid(skimage.io.imread('highfivesgray/21-human-front.jpg'))
