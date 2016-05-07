@@ -230,20 +230,27 @@ class MultilayerNeuralNetwork(object):
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         os.makedirs(os.path.dirname(filename_user_friendly), exist_ok=True)
 
+        accuracy = str(self.get_accuracy(test_data))
+        precision_high_fives = str(self.get_high_five_precision(test_data))
+        precision_not_high_fives = str(self.get_not_high_five_precision(test_data))
+        recall_high_fives = str(self.get_high_five_recall(test_data))
+        recall_not_high_fives = str(self.get_not_high_five_recall(test_data))
+
+
         with open(filename_user_friendly, "w") as f:
-            f.write("Accuracy: " + str(self.get_accuracy(test_data)))
-            f.write("Precision (high fives): " + str(self.get_high_five_precision(test_data)))
-            f.write("Precision (not high fives): " + str(self.get_not_high_five_precision(test_data)))
-            f.write("Recall (high fives): " + str(self.get_high_five_recall(test_data)))
-            f.write("Recall (not high fives): " + str(self.get_not_high_five_recall(test_data)))
+            f.write("Accuracy: " + accuracy)
+            f.write("Precision (high fives): " + precision_high_fives)
+            f.write("Precision (not high fives): " + precision_not_high_fives)
+            f.write("Recall (high fives): " + recall_high_fives)
+            f.write("Recall (not high fives): " + recall_not_high_fives)
         f.close()
 
         with open(filename, "w") as f:
-            f.write(self.get_accuracy(test_data))
-            f.write(self.get_high_five_precision(test_data))
-            f.write(self.get_not_high_five_precision(test_data))
-            f.write(self.get_high_five_recall(test_data))
-            f.write(self.get_not_high_five_recall(test_data))
+            f.write(accuracy)
+            f.write(precision_high_fives)
+            f.write(precision_not_high_fives)
+            f.write(recall_high_fives)
+            f.write(recall_not_high_fives)
         f.close()
 
     def test(self, test_data, classifier):
