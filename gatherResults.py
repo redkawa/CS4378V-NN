@@ -9,6 +9,12 @@ from sklearn.preprocessing import scale # if we want to standardize the data). i
 # - Neural Network classifier: 9 inputs (10x10 grid)
 # - Naive Bayes classifier
 
+# TO DO:
+# get 10-20 pictures of your hand and 10-20 pictures of not a high five for test data
+# get ~50 random sample pictures that aren't a high five for the rest of the training data
+# finish implementing the rest of the gather_statistics loops
+# implement a Bayes version
+
 # Neural Networks parameters
 
 hidden_node_dict = {1:1, 2:2, 3:3, 4:4}

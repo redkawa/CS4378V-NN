@@ -136,19 +136,91 @@ class MultilayerNeuralNetwork(object):
         return error
 
     def get_accuracy(self, test_data):
-        return '1'
+
+        true = 0
+        total = 0
+        for row in test_data:
+            total += 1
+            predicted = self.feed_forward(row[0])
+            if row[1].index(max(row[1])) == predicted.index(max(predicted)):
+                true += 1
+            # row is a row from the test data
+            # row[1] is the y values (on the right), row[0] is the x values (on the left)
+            # prints the known y value, then prints the predicted y value
+
+        return true / total
 
     def get_high_five_precision(self, test_data):
-        return '1'
+        true_positives = 0
+        false_positives = 0
+        for row in test_data:
+
+            predicted = self.feed_forward(row[0])
+            if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 0:
+                true_positives += 1
+            elif predicted.index(max(predicted)) == 0 and row[1][0] is not 1.0:
+                false_positives += 1
+            #[high five confidence, NOT high five confidence]
+            # row is a row from the test data
+            # row[1] is the y values (on the right), row[0] is the x values (on the left)
+            # prints the known y value, then prints the predicted y value
+
+        return true_positives / (false_positives + true_positives)
 
     def get_not_high_five_precision(self, test_data):
-        return '1'
+
+        true_positives = 0
+        false_positives = 0
+        for row in test_data:
+
+            predicted = self.feed_forward(row[0])
+            if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 1:
+                true_positives += 1
+            elif predicted.index(max(predicted)) == 1 and row[1][1] is not 1.0:
+                false_positives += 1
+            #[high five confidence, NOT high five confidence]
+            # row is a row from the test data
+            # row[1] is the y values (on the right), row[0] is the x values (on the left)
+            # prints the known y value, then prints the predicted y value
+
+        return true_positives / (false_positives + true_positives)
+
 
     def get_high_five_recall(self, test_data):
-        return '1'
+
+        true_positives = 0
+        false_negatives = 0
+        for row in test_data:
+
+            predicted = self.feed_forward(row[0])
+            if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 0:
+                true_positives += 1
+            elif predicted.index(max(predicted)) == 0 and row[1][0] is not 0.0:
+                false_negatives += 1
+            #[high five confidence, NOT high five confidence]
+            # row is a row from the test data
+            # row[1] is the y values (on the right), row[0] is the x values (on the left)
+            # prints the known y value, then prints the predicted y value
+
+        return true_positives / (false_negatives + true_positives)
 
     def get_not_high_five_recall(self, test_data):
-        return '1'
+
+        true_positives = 0
+        false_negatives = 0
+        for row in test_data:
+
+            predicted = self.feed_forward(row[0])
+            if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 1:
+                true_positives += 1
+            elif predicted.index(max(predicted)) == 1 and row[1][1] is not 0.0:
+                false_negatives += 1
+            #[high five confidence, NOT high five confidence]
+            # row is a row from the test data
+            # row[1] is the y values (on the right), row[0] is the x values (on the left)
+            # prints the known y value, then prints the predicted y value
+
+        return true_positives / (false_negatives + true_positives)
 
     def writeResults(self, test_data, classifier):
 
