@@ -142,11 +142,14 @@ class MultilayerNeuralNetwork(object):
         for row in test_data:
             total += 1
             predicted = self.feed_forward(row[0])
-            if row[1].index(max(row[1])) == predicted.index(max(predicted)):
+            if row[1].index(max(row[1])) == predicted.tolist().index(max(predicted)):
                 true += 1
             # row is a row from the test data
             # row[1] is the y values (on the right), row[0] is the x values (on the left)
             # prints the known y value, then prints the predicted y value
+
+        print("True: " + str(true))
+        print("Total: " + str(total))
 
         return true / total
 
@@ -156,15 +159,17 @@ class MultilayerNeuralNetwork(object):
         for row in test_data:
 
             predicted = self.feed_forward(row[0])
-            if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 0:
+            if row[1].index(max(row[1])) == predicted.tolist().index(max(predicted)) and row[1].index(max(row[1])) == 0:
                 true_positives += 1
-            elif predicted.index(max(predicted)) == 0 and row[1][0] is not 1.0:
+            elif predicted.tolist().index(max(predicted)) == 0 and row[1][0] is not 1.0:
                 false_positives += 1
             #[high five confidence, NOT high five confidence]
             # row is a row from the test data
             # row[1] is the y values (on the right), row[0] is the x values (on the left)
             # prints the known y value, then prints the predicted y value
 
+        print("False Positives: " + str(false_positives))
+        print("True Positives: " + str(true_positives))
         return true_positives / (false_positives + true_positives)
 
     def get_not_high_five_precision(self, test_data):
@@ -174,9 +179,9 @@ class MultilayerNeuralNetwork(object):
         for row in test_data:
 
             predicted = self.feed_forward(row[0])
-            if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 1:
+            if row[1].index(max(row[1])) == predicted.tolist().index(max(predicted)) and row[1].index(max(row[1])) == 1:
                 true_positives += 1
-            elif predicted.index(max(predicted)) == 1 and row[1][1] is not 1.0:
+            elif predicted.tolist().index(max(predicted)) == 1 and row[1][1] is not 1.0:
                 false_positives += 1
             #[high five confidence, NOT high five confidence]
             # row is a row from the test data
@@ -185,7 +190,6 @@ class MultilayerNeuralNetwork(object):
 
         return true_positives / (false_positives + true_positives)
 
-
     def get_high_five_recall(self, test_data):
 
         true_positives = 0
@@ -193,9 +197,9 @@ class MultilayerNeuralNetwork(object):
         for row in test_data:
 
             predicted = self.feed_forward(row[0])
-            if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 0:
+            if row[1].index(max(row[1])) == predicted.tolist().index(max(predicted)) and row[1].index(max(row[1])) == 0:
                 true_positives += 1
-            elif predicted.index(max(predicted)) == 0 and row[1][0] is not 0.0:
+            elif predicted.tolist().index(max(predicted)) == 0 and row[1][0] is not 0.0:
                 false_negatives += 1
             #[high five confidence, NOT high five confidence]
             # row is a row from the test data
@@ -213,7 +217,7 @@ class MultilayerNeuralNetwork(object):
             predicted = self.feed_forward(row[0])
             if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 1:
                 true_positives += 1
-            elif predicted.index(max(predicted)) == 1 and row[1][1] is not 0.0:
+            elif predicted.tolist().index(max(predicted)) == 1 and row[1][1] is not 0.0:
                 false_negatives += 1
             #[high five confidence, NOT high five confidence]
             # row is a row from the test data
@@ -224,8 +228,8 @@ class MultilayerNeuralNetwork(object):
 
     def writeResults(self, test_data, classifier):
 
-        filename = "/results/" + classifier + "/" + self.hidden + "/" + self.iterations + "/" + self.learning_rate + "/" + self.momentum + "/" + self.rate_decay + "/results.txt"
-        filename_user_friendly = "/results/" + classifier + "/" + self.hidden + "/" + self.iterations + "/" + self.learning_rate + "/" + self.momentum + "/" + self.rate_decay + "/results_user_friendly.txt"
+        filename = "results/" + classifier + "/" + str(self.hidden) + "/" + str(self.iterations) + "/" + str(self.learning_rate) + "/" + str(self.momentum) + "/" + str(self.rate_decay) + "/results.txt"
+        filename_user_friendly = "results/" + classifier + "/" + str(self.hidden) + "/" + str(self.iterations) + "/" + str(self.learning_rate) + "/" + str(self.momentum) + "/" + str(self.rate_decay) + "/results_user_friendly.txt"
 
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         os.makedirs(os.path.dirname(filename_user_friendly), exist_ok=True)
@@ -262,7 +266,7 @@ class MultilayerNeuralNetwork(object):
             # row is a row from the test data
             # row[1] is the y values (on the right), row[0] is the x values (on the left)
             # prints the known y value, then prints the predicted y value
-            print('Actual: ' + str(row[1]) + '   Predicted: ' + self.feed_forward(row[0]))
+            print('Actual: ' + str(row[1]) + '   Predicted: ' + str(self.feed_forward(row[0])))
 
         self.writeResults(test_data, classifier)
 

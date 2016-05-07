@@ -1,7 +1,6 @@
 import numpy as np
 import os
 
-
 def load_training_data():
     data = np.loadtxt('training_data.csv', delimiter=',')
 
@@ -33,8 +32,101 @@ def load_test_data():
 
     return arrayOfLists
 
+def makeDiscrete(data):
+    for row in data:
+        for value in row[0]:
+            if (0 <= value and value <= 0.05):
+                value = 0
+            elif (0.05 < value and value <= 0.1):
+                value = 0.05
+            elif (0.01 < value and value <= 0.15):
+                value = 0.1
+            elif (0.15 < value and value <= 0.2):
+                value = 0.15
+            elif (0.2 < value and value <= 0.25):
+                value = 0.2
+            elif (0.25 < value and value <= 0.3):
+                value = 0.25
+            elif (0.3 < value and value <= 0.35):
+                value = 0.3
+            elif (0.35 < value and value <= 0.4):
+                value = 0.35
+            elif (0.4 < value and value <= 0.45):
+                value = 0.4
+            elif (0.45 < value and value <= 0.5):
+                value = 0.45
+            elif (0.5 < value and value <= 0.55):
+                value = 0.5
+            elif (0.55 < value and value <= 0.6):
+                value = 0.55
+            elif (0.6 < value and value <= 0.65):
+                value = 0.6
+            elif (0.65 < value and value <= 0.7):
+                value = 0.65
+            elif (0.7 < value and value <= 0.75):
+                value = 0.7
+            elif (0.75 < value and value <= 0.8):
+                value = 0.75
+            elif (0.8 < value and value <= 0.85):
+                value = 0.8
+            elif (0.85 < value and value <= 0.9):
+                value = 0.85
+            elif (0.9 < value and value <= 0.95):
+                value = 0.9
+            elif (0.95 < value and value <= 1.0):
+                value = 0.95
+
+
 def classify(sample, data):
-    return 1
+    # sample is in the form of: [[x1, x2... xn], [y1, y2]]
+    # should return a y: [y1, y2]
+
+    makeDiscrete(data)
+    makeDiscrete(sample)
+
+    # Make all x values one of 20 discrete values: 0, 0.05, 0.10, etc.
+    total = 0
+    num_hf = 0 # Number of data points such that a high five is indicated
+    num_not_hf = 0 # Number of data points such that a high five is NOT indicated
+
+    for row in data:
+        if row[1].index(max(row[1])) is 0:
+            num_hf += 1
+        elif row[1].index(max(row[1])) is 1:
+            num_not_hf += 1
+        total += 1
+
+    # Above, we tallied up the total number of y's,
+    # the total number of y = high five's,
+    # and the total number of y = NOT high five's.
+
+    prob_hf = num_hf / total # here we get the p(y = high five) term to start.
+    prob_not_hf = num_not_hf / total # here we get the p(y = NOT high five) term to start.
+
+    x_dict = {}
+    y_dict = {}
+    value_dict = {}
+    for i in range(20):
+        value_dict[i * 0.05] = 0 # Here we create a dictionary of the number of occurances of x = 0.0, 0.05, etc
+    for i in range(len(row[0])):
+        x_dict[i] = value_dict.copy() # Here we create n (as in x1, x2.. xn) dictionaries. Each dict stores the number of times that value has occured.
+    for i in range(len(row[1])):
+        y_dict[i] = value_dict.copy() # Here we create n (as in y1, y2, .. yn) dictionaries. Each dict stores the number of times that x value occured, given that i is the most probable value.
+    for row in data:
+        for i in len(row[0]):
+            y_dict[row[1].index(max(row[1]))][row[0][i]] += 1 # super tricky. the y value with that was decided for sample row[0]'s corresponding dict has 1 added for the x value it has
+            x_dict[i][row[0][i]] += 1
+    total_given_y_is_0 = 0
+    for key in y_dict[0]:
+        total_given_y_is_0 += y_dict[0][key]
+    total_given_y_is_1 = 0
+    for key in y_dict[1]:
+        total_given_y_is_1 += y_dict[1][key]
+    for i in range(len(row[1])):
+        prob_hf *= ((y_dict[0][sample[0][i]] + 1) / (total_given_y_is_0 + len(row[1]))) #LP Smoothing, do actual bayes calculation
+        prob_not_hf *= ((y_dict[1][sample[0][i]] + 1) / (total_given_y_is_1 + len(row[1]))) #LP Smoothing, do actual bayes calculation
+
+    return [prob_hf, prob_not_hf]
 
 def get_accuracy(test_data):
     true = 0
@@ -50,13 +142,11 @@ def get_accuracy(test_data):
 
     return true / total
 
-
 def get_high_five_precision(test_data):
     true_positives = 0
     false_positives = 0
     for row in test_data:
-
-        predicted = self.feed_forward(row[0])
+        predicted = classify(row, test_data)
         if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 0:
             true_positives += 1
         elif predicted.index(max(predicted)) == 0 and row[1][0] is not 1.0:
@@ -74,7 +164,7 @@ def get_not_high_five_precision(test_data):
     false_positives = 0
     for row in test_data:
 
-        predicted = self.feed_forward(row[0])
+        predicted = classify(row, test_data)
         if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 1:
             true_positives += 1
         elif predicted.index(max(predicted)) == 1 and row[1][1] is not 1.0:
@@ -91,8 +181,7 @@ def get_high_five_recall(test_data):
     true_positives = 0
     false_negatives = 0
     for row in test_data:
-
-        predicted = self.feed_forward(row[0])
+        predicted = classify(row, test_data)
         if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 0:
             true_positives += 1
         elif predicted.index(max(predicted)) == 0 and row[1][0] is not 0.0:
@@ -109,8 +198,7 @@ def get_not_high_five_recall(test_data):
     true_positives = 0
     false_negatives = 0
     for row in test_data:
-
-        predicted = self.feed_forward(row[0])
+        predicted = classify(row, test_data)
         if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 1:
             true_positives += 1
         elif predicted.index(max(predicted)) == 1 and row[1][1] is not 0.0:
@@ -124,17 +212,17 @@ def get_not_high_five_recall(test_data):
 
 
 def writeResults(test_data, classifier):
-    filename = "/results/" + classifier + "/" + self.hidden + "/" + self.iterations + "/" + self.learning_rate + "/" + self.momentum + "/" + self.rate_decay + "/results.txt"
-    filename_user_friendly = "/results/" + classifier + "/" + self.hidden + "/" + self.iterations + "/" + self.learning_rate + "/" + self.momentum + "/" + self.rate_decay + "/results_user_friendly.txt"
+    filename = "results/" + classifier + "/results.txt"
+    filename_user_friendly = "results/" + classifier + "/results_user_friendly.txt"
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     os.makedirs(os.path.dirname(filename_user_friendly), exist_ok=True)
 
-    accuracy = str(self.get_accuracy(test_data))
-    precision_high_fives = str(self.get_high_five_precision(test_data))
-    precision_not_high_fives = str(self.get_not_high_five_precision(test_data))
-    recall_high_fives = str(self.get_high_five_recall(test_data))
-    recall_not_high_fives = str(self.get_not_high_five_recall(test_data))
+    accuracy = str(get_accuracy(test_data))
+    precision_high_fives = str(get_high_five_precision(test_data))
+    precision_not_high_fives = str(get_not_high_five_precision(test_data))
+    recall_high_fives = str(get_high_five_recall(test_data))
+    recall_not_high_fives = str(get_not_high_five_recall(test_data))
 
     with open(filename_user_friendly, "w") as f:
         f.write("Accuracy: " + accuracy)
@@ -152,7 +240,6 @@ def writeResults(test_data, classifier):
         f.write(recall_not_high_fives)
     f.close()
 
-
 def test(test_data, training_data, classifier):
     """
     Currently this will print(out the targets next to the predictions.
@@ -162,7 +249,7 @@ def test(test_data, training_data, classifier):
         # row is a row from the test data
         # row[1] is the y values (on the right), row[0] is the x values (on the left)
         # prints the known y value, then prints the predicted y value
-        print('Actual: ' + str(row[1]) + '   Predicted: ' + classify(train_data, row))
+        print('Actual: ' + str(row[1]) + '   Predicted: ' + str(classify(row, training_data)))
 
     writeResults(test_data, classifier)
 
@@ -172,7 +259,6 @@ def run_bayes():
     test_data = load_test_data()
 
     modified_training_data = []
-    mean = 0
 
     for row in training_data:
         for matrix_col in range(3):
@@ -278,7 +364,7 @@ def run_bayes():
         row[0] = modified_training_data
 
     modified_test_data = []
-    mean = 0
+
     for row in test_data:
         for matrix_col in range(3):
             for matrix_row in range(3):
@@ -381,7 +467,7 @@ def run_bayes():
                 mean = mean / 100
                 modified_test_data.append(mean)
         row[0] = modified_test_data
-
         # At this point, we have 9 x values instead of 900.
         # Each value is the average gray-ness of 100 points
         # from its corresponding 10x10 grid location.
+    test(test_data, training_data, 'Bayes')

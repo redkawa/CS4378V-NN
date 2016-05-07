@@ -9,6 +9,7 @@ import numpy as np
 import tensorflow as tf
 import imageProcessing
 import time
+import gatherResults
 
 #Using sigmoid as activation function
 class Neu_Net( object ):
@@ -47,6 +48,7 @@ NN = Neu_Net()
 #print( NN.sigmoid( NN.weight_2 ) )
 start = time.time()
 imageProcessing.setup()
+gatherResults.gather_statistics()
 end = time.time()
 print("Time it took (in seconds): " + str(end - start))
 #imageProcessing.printImageAsGrid(skimage.io.imread('highfivesgray/21-human-front.jpg'))

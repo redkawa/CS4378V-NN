@@ -1,7 +1,7 @@
 from MultilayerNeuralNetwork import MultilayerNeuralNetwork
 import Bayes
 import numpy as np
-from datetime import time
+import time
 from sklearn.preprocessing import scale # if we want to standardize the data). it's normalized by default.
 
 # List of classifiers:
@@ -11,7 +11,7 @@ from sklearn.preprocessing import scale # if we want to standardize the data). i
 # - Naive Bayes classifier
 
 # TO DO:
-# implement a Bayes version
+# Gather up the most accurate algorithms
 
 # Neural Networks parameters
 
@@ -57,6 +57,9 @@ def gather_statistics():
 
     # - Neural Network classifier: 900 inputs (1x1 grid)
 
+    print("Begin: Neural Network classifier: 900 inputs (1x1 grid)")
+    start_900 = time.time()
+
     for hidden_node_dict_key in hidden_node_dict:
         for iterations_dict_key in iterations_dict:
             for momentum_dict_key in momentum_dict:
@@ -79,6 +82,10 @@ def gather_statistics():
                         #neural_net.test(training_data, '900') #test it on the training data
                         neural_net.test(test_data, '900') #test it on the test data
 
+    end_900 = time.time()
+    print("Time it took to compute NN-900: " + str(end_900 - start_900))
+    print("Begin: Neural Network classifier: 100 inputs (3x3 grid)")
+    start_100 = time.time()
     # - Neural Network classifier: 100 inputs (3x3 grid)
 
     for hidden_node_dict_key in hidden_node_dict:
@@ -129,6 +136,10 @@ def gather_statistics():
                         #neural_net.test(training_data, '100') #test it on the training data
                         neural_net.test(test_data, '100') #test it on the test data
 
+    end_100 = time.time()
+    print("Time it took to compute NN-100: " + str(end_100 - start_100))
+    print("Begin: Neural Network classifier: 9 inputs (10x10 grid)")
+    start_9 = time.time()
     # - Neural Network classifier: 9 inputs (10x10 grid)
 
     for hidden_node_dict_key in hidden_node_dict:
@@ -195,9 +206,16 @@ def gather_statistics():
                         #neural_net.test(training_data, '9') #test it on the training data
                         neural_net.test(test_data, '9') #test it on the test data, also writes results
 
+    end_9 = time.time()
+    print("Time it took to compute NN-9: " + str(end_9 - start_9))
+
     # - Naive Bayes classifier
+
+    print("Begin: Naive Bayes classifier")
+    start_bayes = time.time()
 
     Bayes.run_bayes()
 
     end = time.time()
-    print("Time it took to gather stats: " + str(end - start))
+    print("Time it took to compute Naive Bayes: " + str(end - start_bayes))
+    print("Time it took TOTAL to gather stats: " + str(end - start))
