@@ -148,8 +148,8 @@ class MultilayerNeuralNetwork(object):
             # row[1] is the y values (on the right), row[0] is the x values (on the left)
             # prints the known y value, then prints the predicted y value
 
-        print("True: " + str(true))
-        print("Total: " + str(total))
+        #print("True: " + str(true))
+        #print("Total: " + str(total))
 
         return true / total
 
@@ -169,8 +169,8 @@ class MultilayerNeuralNetwork(object):
             # row[1] is the y values (on the right), row[0] is the x values (on the left)
             # prints the known y value, then prints the predicted y value
 
-        print("False Positives: " + str(false_positives))
-        print("True Positives: " + str(true_positives))
+        #print("False Positives: " + str(false_positives))
+        #print("True Positives: " + str(true_positives))
         if (false_positives + true_positives) == 0:
             return 0
         return true_positives / (false_positives + true_positives)
