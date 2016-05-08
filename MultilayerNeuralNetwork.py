@@ -159,9 +159,10 @@ class MultilayerNeuralNetwork(object):
         for row in test_data:
 
             predicted = self.feed_forward(row[0])
+
             if row[1].index(max(row[1])) == predicted.tolist().index(max(predicted)) and row[1].index(max(row[1])) == 0:
                 true_positives += 1
-            elif predicted.tolist().index(max(predicted)) == 0 and row[1][0] is not 1.0:
+            elif predicted.tolist().index(max(predicted)) == 0 and row[1][0] != 1.0:
                 false_positives += 1
             #[high five confidence, NOT high five confidence]
             # row is a row from the test data
@@ -170,6 +171,8 @@ class MultilayerNeuralNetwork(object):
 
         print("False Positives: " + str(false_positives))
         print("True Positives: " + str(true_positives))
+        if (false_positives + true_positives) == 0:
+            return 0
         return true_positives / (false_positives + true_positives)
 
     def get_not_high_five_precision(self, test_data):
@@ -181,13 +184,15 @@ class MultilayerNeuralNetwork(object):
             predicted = self.feed_forward(row[0])
             if row[1].index(max(row[1])) == predicted.tolist().index(max(predicted)) and row[1].index(max(row[1])) == 1:
                 true_positives += 1
-            elif predicted.tolist().index(max(predicted)) == 1 and row[1][1] is not 1.0:
+            elif predicted.tolist().index(max(predicted)) == 1 and row[1][1] != 1.0:
                 false_positives += 1
             #[high five confidence, NOT high five confidence]
             # row is a row from the test data
             # row[1] is the y values (on the right), row[0] is the x values (on the left)
             # prints the known y value, then prints the predicted y value
 
+        if (false_positives + true_positives) == 0:
+            return 0
         return true_positives / (false_positives + true_positives)
 
     def get_high_five_recall(self, test_data):
@@ -197,9 +202,13 @@ class MultilayerNeuralNetwork(object):
         for row in test_data:
 
             predicted = self.feed_forward(row[0])
+            #print("--- HF Recall")
+            #print("Index of max y value in test_data row: " + str(row[1].index(max(row[1]))))
+            #print("Index of max y value in predicted: " + str(predicted.tolist().index(max(predicted))))
+
             if row[1].index(max(row[1])) == predicted.tolist().index(max(predicted)) and row[1].index(max(row[1])) == 0:
                 true_positives += 1
-            elif predicted.tolist().index(max(predicted)) == 0 and row[1][0] is not 0.0:
+            elif predicted.tolist().index(max(predicted)) == 1 and row[1][0] != 0.0:
                 false_negatives += 1
             #[high five confidence, NOT high five confidence]
             # row is a row from the test data
@@ -215,15 +224,16 @@ class MultilayerNeuralNetwork(object):
         for row in test_data:
 
             predicted = self.feed_forward(row[0])
-            if row[1].index(max(row[1])) == predicted.index(max(predicted)) and row[1].index(max(row[1])) == 1:
+            if row[1].index(max(row[1])) == predicted.tolist().index(max(predicted)) and row[1].index(max(row[1])) == 1:
                 true_positives += 1
-            elif predicted.tolist().index(max(predicted)) == 1 and row[1][1] is not 0.0:
+            elif predicted.tolist().index(max(predicted)) == 1 and row[1][1] != 0.0:
                 false_negatives += 1
             #[high five confidence, NOT high five confidence]
             # row is a row from the test data
             # row[1] is the y values (on the right), row[0] is the x values (on the left)
             # prints the known y value, then prints the predicted y value
-
+        if (false_negatives + true_positives) == 0:
+            return 0
         return true_positives / (false_negatives + true_positives)
 
     def writeResults(self, test_data, classifier):
@@ -242,19 +252,19 @@ class MultilayerNeuralNetwork(object):
 
 
         with open(filename_user_friendly, "w") as f:
-            f.write("Accuracy: " + accuracy)
-            f.write("Precision (high fives): " + precision_high_fives)
-            f.write("Precision (not high fives): " + precision_not_high_fives)
-            f.write("Recall (high fives): " + recall_high_fives)
-            f.write("Recall (not high fives): " + recall_not_high_fives)
+            f.write("Accuracy: " + accuracy + "\n")
+            f.write("Precision (high fives): " + precision_high_fives + "\n")
+            f.write("Precision (not high fives): " + precision_not_high_fives + "\n")
+            f.write("Recall (high fives): " + recall_high_fives + "\n")
+            f.write("Recall (not high fives): " + recall_not_high_fives + "\n")
         f.close()
 
         with open(filename, "w") as f:
-            f.write(accuracy)
-            f.write(precision_high_fives)
-            f.write(precision_not_high_fives)
-            f.write(recall_high_fives)
-            f.write(recall_not_high_fives)
+            f.write(accuracy + "\n")
+            f.write(precision_high_fives + "\n")
+            f.write(precision_not_high_fives + "\n")
+            f.write(recall_high_fives + "\n")
+            f.write(recall_not_high_fives + "\n")
         f.close()
 
     def test(self, test_data, classifier):
@@ -262,11 +272,11 @@ class MultilayerNeuralNetwork(object):
         Currently this will print(out the targets next to the predictions.
         Not useful for actual ML, just for visual inspection.
         """
-        for row in test_data:
+        #for row in test_data:
             # row is a row from the test data
             # row[1] is the y values (on the right), row[0] is the x values (on the left)
             # prints the known y value, then prints the predicted y value
-            print('Actual: ' + str(row[1]) + '   Predicted: ' + str(self.feed_forward(row[0])))
+            #print('Actual: ' + str(row[1]) + '   Predicted: ' + str(self.feed_forward(row[0])))
 
         self.writeResults(test_data, classifier)
 
@@ -292,7 +302,7 @@ class MultilayerNeuralNetwork(object):
 
             if i % 10 == 0:
                 error = error/num_example
-            print('Training error %-.5f' % error)
+            #print('Training error %-.5f' % error)
 
             # learning rate decay
             self.learning_rate = self.learning_rate * (self.learning_rate / (self.learning_rate + (self.learning_rate * self.rate_decay)))

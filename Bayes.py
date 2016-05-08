@@ -225,19 +225,19 @@ def writeResults(test_data, classifier):
     recall_not_high_fives = str(get_not_high_five_recall(test_data))
 
     with open(filename_user_friendly, "w") as f:
-        f.write("Accuracy: " + accuracy)
-        f.write("Precision (high fives): " + precision_high_fives)
-        f.write("Precision (not high fives): " + precision_not_high_fives)
-        f.write("Recall (high fives): " + recall_high_fives)
-        f.write("Recall (not high fives): " + recall_not_high_fives)
+        f.write("Accuracy: " + accuracy + "\n")
+        f.write("Precision (high fives): " + precision_high_fives + "\n")
+        f.write("Precision (not high fives): " + precision_not_high_fives + "\n")
+        f.write("Recall (high fives): " + recall_high_fives + "\n")
+        f.write("Recall (not high fives): " + recall_not_high_fives + "\n")
     f.close()
 
     with open(filename, "w") as f:
-        f.write(accuracy)
-        f.write(precision_high_fives)
-        f.write(precision_not_high_fives)
-        f.write(recall_high_fives)
-        f.write(recall_not_high_fives)
+        f.write(accuracy + "\n")
+        f.write(precision_high_fives + "\n")
+        f.write(precision_not_high_fives + "\n")
+        f.write(recall_high_fives + "\n")
+        f.write(recall_not_high_fives + "\n")
     f.close()
 
 def test(test_data, training_data, classifier):
