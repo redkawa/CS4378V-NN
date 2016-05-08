@@ -76,6 +76,8 @@ class MultilayerNeuralNetwork(object):
         :param inputs: input data
         :return: updated activation output vector
         """
+        #print("Length of inputs: " + str(len(inputs)))
+        #print("Length of self.input - 1: " + str(self.input - 1))
         if len(inputs) != self.input-1:
             raise ValueError('Wrong number of inputs you silly goose!')
 
@@ -283,7 +285,7 @@ class MultilayerNeuralNetwork(object):
     def fit(self, patterns):
 
         num_example = np.shape(patterns)[0]
-        print(np.shape(patterns)[0])
+        #print(np.shape(patterns)[0])
 
         writeError('\nBeginning of Errors: \n')
 

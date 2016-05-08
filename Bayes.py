@@ -33,7 +33,11 @@ def load_test_data():
     return arrayOfLists
 
 def makeDiscrete(data):
+    total = 0
     for row in data:
+        total += 1
+        print(total)
+        print(row)
         for value in row[0]:
             if (0 <= value and value <= 0.05):
                 value = 0
@@ -75,13 +79,16 @@ def makeDiscrete(data):
                 value = 0.9
             elif (0.95 < value and value <= 1.0):
                 value = 0.95
-
+    print("FUNCTION FINISHED")
 
 def classify(sample, data):
     # sample is in the form of: [[x1, x2... xn], [y1, y2]]
     # should return a y: [y1, y2]
 
     makeDiscrete(data)
+    print("--- Sample ---")
+    print(str(sample))
+    print("//////sample")
     makeDiscrete(sample)
 
     # Make all x values one of 20 discrete values: 0, 0.05, 0.10, etc.
@@ -126,6 +133,7 @@ def classify(sample, data):
         prob_hf *= ((y_dict[0][sample[0][i]] + 1) / (total_given_y_is_0 + len(row[1]))) #LP Smoothing, do actual bayes calculation
         prob_not_hf *= ((y_dict[1][sample[0][i]] + 1) / (total_given_y_is_1 + len(row[1]))) #LP Smoothing, do actual bayes calculation
 
+    print("DOES IT GET HERE?")
     return [prob_hf, prob_not_hf]
 
 def get_accuracy(test_data):
@@ -245,11 +253,11 @@ def test(test_data, training_data, classifier):
     Currently this will print(out the targets next to the predictions.
     Not useful for actual ML, just for visual inspection.
     """
-    for row in test_data:
+    #for row in test_data:
         # row is a row from the test data
         # row[1] is the y values (on the right), row[0] is the x values (on the left)
         # prints the known y value, then prints the predicted y value
-        print('Actual: ' + str(row[1]) + '   Predicted: ' + str(classify(row, training_data)))
+        #print('Actual: ' + str(row[1]) + '   Predicted: ' + str(classify(row, training_data)))
 
     writeResults(test_data, classifier)
 
@@ -362,6 +370,7 @@ def run_bayes():
                 mean = mean / 100
                 modified_training_data.append(mean)
         row[0] = modified_training_data
+        modified_training_data = []
 
     modified_test_data = []
 
@@ -467,6 +476,7 @@ def run_bayes():
                 mean = mean / 100
                 modified_test_data.append(mean)
         row[0] = modified_test_data
+        modified_test_data = []
         # At this point, we have 9 x values instead of 900.
         # Each value is the average gray-ness of 100 points
         # from its corresponding 10x10 grid location.

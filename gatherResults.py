@@ -57,7 +57,7 @@ def gather_statistics():
 
     # - Neural Network classifier: 900 inputs (1x1 grid)
 
-    print("Begin: Neural Network classifier: 900 inputs (1x1 grid)")
+    print("Begin: Neural Network classifier: 900 inputs (1x1 grid) - takes 11.5 min on Josh's macbook")
     start_900 = time.time()
 
     for hidden_node_dict_key in hidden_node_dict:
@@ -84,7 +84,7 @@ def gather_statistics():
 
     end_900 = time.time()
     print("Time it took to compute NN-900: " + str(end_900 - start_900))
-    print("Begin: Neural Network classifier: 100 inputs (3x3 grid)")
+    print("Begin: Neural Network classifier: 100 inputs (3x3 grid) - takes 6.6 min on Josh's macbook")
     start_100 = time.time()
     # - Neural Network classifier: 100 inputs (3x3 grid)
 
@@ -104,7 +104,6 @@ def gather_statistics():
 
                         training_data = load_training_data()
                         test_data = load_test_data()
-
                         modified_training_data = []
                         mean = 0
                         for row in training_data:
@@ -113,7 +112,7 @@ def gather_statistics():
                                     mean = (row[0][(0 + 90 * matrix_col) + (3 * matrix_row)]    +   row[0][(1 + 90 * matrix_col) + (3 * matrix_row)]    +   row[0][(2 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(30 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(31 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(32 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(60 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(61 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(62 + 90 * matrix_col) + (3 * matrix_row)]) / 9
                                     modified_training_data.append(mean)
                             row[0] = modified_training_data
-
+                            modified_training_data = []
                         # At this point, we have 100 x values instead of 900.
                         # Each value is the average gray-ness of 9 points
                         # from its corresponding 3x3 grid location.
@@ -126,6 +125,7 @@ def gather_statistics():
                                     mean = (row[0][(0 + 90 * matrix_col) + (3 * matrix_row)]    +   row[0][(1 + 90 * matrix_col) + (3 * matrix_row)]    +   row[0][(2 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(30 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(31 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(32 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(60 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(61 + 90 * matrix_col) + (3 * matrix_row)] + row[0][(62 + 90 * matrix_col) + (3 * matrix_row)]) / 9
                                     modified_test_data.append(mean)
                             row[0] = modified_test_data
+                            modified_test_data = []
 
                         # At this point, we have 100 x values instead of 900.
                         # Each value is the average gray-ness of 9 points
@@ -138,7 +138,7 @@ def gather_statistics():
 
     end_100 = time.time()
     print("Time it took to compute NN-100: " + str(end_100 - start_100))
-    print("Begin: Neural Network classifier: 9 inputs (10x10 grid)")
+    print("Begin: Neural Network classifier: 9 inputs (10x10 grid) - takes 6.05 min on Josh's macbook")
     start_9 = time.time()
     # - Neural Network classifier: 9 inputs (10x10 grid)
 
@@ -177,6 +177,7 @@ def gather_statistics():
                                     mean = mean / 100
                                     modified_training_data.append(mean)
                             row[0] = modified_training_data
+                            modified_training_data = []
 
                         modified_test_data = []
                         mean = 0
@@ -196,6 +197,7 @@ def gather_statistics():
                                     mean = mean / 100
                                     modified_test_data.append(mean)
                             row[0] = modified_test_data
+                            modified_test_data = []
 
                         # At this point, we have 9 x values instead of 900.
                         # Each value is the average gray-ness of 100 points
