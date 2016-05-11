@@ -1,3 +1,16 @@
+KEY:
+Accuracy
+     Precision (High Fives)
+          Precision (Not High Fives)
+	       Recall (High Fives)
+	            Recall (Not High Fives)
+			  classifier
+		           /hidden nodes
+		             /iterations
+				 /Learning Rate
+				                    /momentum
+							/Rate of Decay of Learning Rate
+
 1.0, 1.0, 1.0, 1.0, 1.0, 9/4/48/0.06202604050651971/0/0.01
 1.0, 1.0, 1.0, 1.0, 1.0, 9/4/46/0.06327276392070078/0/0.01
 1.0, 1.0, 1.0, 1.0, 1.0, 9/4/46/0.06327276392070078/0/0.01
