@@ -61,9 +61,11 @@ def gather_statistics():
         #f.write() #clear out previous results
     #f.close()
 
+    """
 
     # - Neural Network classifier: 900 inputs (1x1 grid)
-    print("Begin: Neural Network classifier: 900 inputs (1x1 grid) - takes 11.5 min on Josh's macbook")
+
+    print("Begin: Neural Network classifier: 900 inputs (1x1 grid) - takes 74 min on Josh's macbook")
     start_900 = time.time()
 
     for hidden_node_dict_key in hidden_node_dict:
@@ -90,7 +92,7 @@ def gather_statistics():
 
     end_900 = time.time()
     print("Time it took to compute NN-900: " + str(end_900 - start_900))
-    print("Begin: Neural Network classifier: 100 inputs (3x3 grid) - takes 6.6 min on Josh's macbook")
+    print("Begin: Neural Network classifier: 100 inputs (3x3 grid) - takes 54.5 min on Josh's macbook")
     start_100 = time.time()
     # - Neural Network classifier: 100 inputs (3x3 grid)
 
@@ -144,7 +146,7 @@ def gather_statistics():
 
     end_100 = time.time()
     print("Time it took to compute NN-100: " + str(end_100 - start_100))
-    print("Begin: Neural Network classifier: 9 inputs (10x10 grid) - takes 6.05 min on Josh's macbook")
+    print("Begin: Neural Network classifier: 9 inputs (10x10 grid) - takes 54.3 min on Josh's macbook")
     start_9 = time.time()
     # - Neural Network classifier: 9 inputs (10x10 grid)
 
@@ -228,9 +230,12 @@ def gather_statistics():
     print("Time it took to compute Naive Bayes: " + str(end - start_bayes))
 
     end = time.time()
-    sortAux()
 
     print("Time it took TOTAL to gather stats: " + str(end - start))
+
+    """
+
+    sortAux() # Sort all the classification results
 
 def sortAux(file_name = "all_results.txt"):
 
@@ -241,7 +246,7 @@ def sortAux(file_name = "all_results.txt"):
 
     sorted_string_array = sort(string_array)
 
-    with open("all_results_copy.txt", "w") as f:
+    with open("all_results_sorted.txt", "w") as f:
         length = len(sorted_string_array)
         for i in range(length):
             f.write(sorted_string_array[length - (1 + i)])
