@@ -23,6 +23,7 @@ momentum_dict = {1:0, 2:0.5, 3:0.9}
 learning_rate_dict = {1:0.1, 2:0.01, 3:0.005, 4:0.001, 5:0.0001}
 learning_rate_decay_dict = {1:0.01, 2:0.001, 3:0.0001}
 
+print(len(hidden_node_dict) * len(iterations_dict) * len(momentum_dict) * len(learning_rate_dict) * len(learning_rate_decay_dict))
 def load_training_data():
         data = np.loadtxt('training_data.csv', delimiter = ',')
 
