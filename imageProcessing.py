@@ -6,6 +6,76 @@ import numpy as np
 import random
 from random import randint
 
+def processSampleImages():
+    # Process test high-fives (if necessary):
+
+    path = './samples_hf'
+    origPath = 'samples_hf/'
+    savePath = 'samplesgray_hf/'
+    endPath = './samplesgray_hf'
+
+    os.makedirs(os.path.dirname('samplesgray_hf/'), exist_ok=True)
+
+    num_files = len([f for f in os.listdir(endPath)
+                     if os.path.isfile(os.path.join(endPath, f))])
+    if num_files == 0:
+
+        for pictureName in os.listdir(path):
+            pathToOrigFile = origPath + pictureName
+            importedPicture = skimage.io.imread(pathToOrigFile)
+            convertedPicture = convertImageObject(importedPicture)
+            putInGrayscaleFolder = savePath + pictureName
+            skimage.io.imsave(putInGrayscaleFolder, convertedPicture)
+
+    os.makedirs(os.path.dirname('samplesgray_nhf/'), exist_ok=True)
+
+    path = './samples_nhf'
+    origPath = 'samples_nhf/'
+    savePath = 'samplesgray_nhf/'
+    endPath = './samplesgray_nhf'
+    num_files = len([f for f in os.listdir(endPath)
+                     if os.path.isfile(os.path.join(endPath, f))])
+    if num_files == 0:
+
+        for pictureName in os.listdir(path):
+            pathToOrigFile = origPath + pictureName
+            importedPicture = skimage.io.imread(pathToOrigFile)
+            convertedPicture = convertImageObject(importedPicture)
+            putInGrayscaleFolder = savePath + pictureName
+            skimage.io.imsave(putInGrayscaleFolder, convertedPicture)
+
+    pictureHeight = 30
+    pictureWidth = 30
+    allSampleData = []
+
+    endPath = './samplesgray_hf'
+    origPath = 'samplesgray_hf/'
+    for pictureName in os.listdir(endPath):
+        if (pictureName != '.DS_Store'):
+            data_set = [1.0000000000, 0.0000000000] #[1, 0] means the y set that indicates it IS a high five
+            pathToOrigFile = origPath + pictureName
+            importedPicture = skimage.io.imread(pathToOrigFile)
+            for h in range(pictureHeight):
+                for w in range(pictureWidth):
+                    normalized = float(importedPicture[h][w])/ 255 # Normalize it
+                    data_set.append(normalized)
+            allSampleData.append(data_set)
+
+    endPath = './samplesgray_nhf'
+    origPath = 'samplesgray_nhf/'
+    for pictureName in os.listdir(endPath):
+        if (pictureName != '.DS_Store'):
+            data_set = [0.0000000000, 1.0000000000] #[0, 1] means the y set that indicates it is NOT a high five
+            pathToOrigFile = origPath + pictureName
+            importedPicture = skimage.io.imread(pathToOrigFile)
+            for h in range(pictureHeight):
+                for w in range(pictureWidth):
+                    normalized = float(importedPicture[h][w])/ 255 # Normalize it
+                    data_set.append(normalized)
+            allSampleData.append(data_set)
+
+    sampleData = np.asarray(allSampleData)
+    np.savetxt("sample_data.csv", sampleData, delimiter=",")
 
 def processImages():
 

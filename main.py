@@ -11,9 +11,16 @@ import imageProcessing
 import time
 import gatherResults
 
-start = time.time()
-imageProcessing.setup()
-gatherResults.gather_statistics()
-end = time.time()
-print("Time it took (in seconds): " + str(end - start))
-#imageProcessing.printImageAsGrid(skimage.io.imread('highfivesgray/21-human-front.jpg'))
+def processEntireSet():
+	start = time.time()
+	imageProcessing.setup()
+	gatherResults.gather_statistics()
+	end = time.time()
+	print("Time to process all NN's (in seconds): " + str(end - start))
+	#imageProcessing.printImageAsGrid(skimage.io.imread('highfivesgray/21-human-front.jpg'))
+
+def processSampleSet():
+	imageProcessing.processSampleImages() # We have now converted all of our data in the sample folders into a .csv
+	gatherResults.gather_sample_statistics()
+
+processSampleSet()

@@ -226,6 +226,27 @@ class MultilayerNeuralNetwork(object):
 
         self.writeResults(test_data, classifier)
 
+    def demo(self, sample_data):
+
+        accuracy = str(self.get_accuracy(sample_data))
+        precision_high_fives = str(self.get_high_five_precision(sample_data))
+        precision_not_high_fives = str(self.get_not_high_five_precision(sample_data))
+        recall_high_fives = str(self.get_high_five_recall(sample_data))
+        recall_not_high_fives = str(self.get_not_high_five_recall(sample_data))
+
+        for row in sample_data:
+            # row is a row from the test data
+            # row[1] is the y values (on the right), row[0] is the x values (on the left)
+            # prints the known y value, then prints the predicted y value
+            print('Actual: ' + str(row[1]) + '   Predicted: ' + str(self.feed_forward(row[0])))
+
+        print("Accuracy: " + accuracy)
+        print("Precision (high fives): " + precision_high_fives)
+        print("Precision (not high fives): " + precision_not_high_fives)
+        print("Recall (high fives): " + recall_high_fives)
+        print("Recall (not high fives): " + recall_not_high_fives)
+
+
     def fit(self, training_data):
 
         num_example = np.shape(training_data)[0]
