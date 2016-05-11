@@ -16,7 +16,9 @@ from sklearn.preprocessing import scale # if we want to standardize the data). i
 # Neural Networks parameters
 
 hidden_node_dict = {1:1, 2:2, 3:3, 4:4}
-iterations_dict = {1:10, 2:11, 3:15, 4:30, 5:50}
+iterations_dict = {}
+for i in range(40):
+    iterations_dict[i + 10] = i + 10
 momentum_dict = {1:0, 2:0.5, 3:0.9}
 learning_rate_dict = {1:0.1, 2:0.01, 3:0.005, 4:0.001, 5:0.0001}
 learning_rate_decay_dict = {1:0.01, 2:0.001, 3:0.0001}
@@ -55,8 +57,11 @@ def gather_statistics():
 
     start = time.time()
 
-    # - Neural Network classifier: 900 inputs (1x1 grid)
+    with open("all_results.txt", "w") as f:
+        f.write() #clear out previous results
+    f.close()
 
+    # - Neural Network classifier: 900 inputs (1x1 grid)
     print("Begin: Neural Network classifier: 900 inputs (1x1 grid) - takes 11.5 min on Josh's macbook")
     start_900 = time.time()
 
@@ -220,4 +225,49 @@ def gather_statistics():
 
     end = time.time()
     print("Time it took to compute Naive Bayes: " + str(end - start_bayes))
+
+    sortAux()
+
     print("Time it took TOTAL to gather stats: " + str(end - start))
+
+def sortAux(file_name = "all_results.txt"):
+
+    string_array = []
+    with open(file_name, "w+") as f:
+        for line in f:
+            string_array.append(line)
+
+    sorted_string_array = sort(string_array)
+
+    with open(file_name, "w") as f:
+        length = len(sorted_string_array)
+        for i in range(length):
+            f.write(sorted_string_array[length - (1 + i)])
+    f.close()
+
+def sort(string_array):
+
+    less = []
+    equal = []
+    greater = []
+
+    if len(string_array) > 1:
+        pivot = string_array[0]
+        for x in string_array:
+
+            indexOfFirstComma = x.index(',')
+            accuracy = x[:indexOfFirstComma]
+            x_accuracy_number = float(accuracy)
+
+            indexOfPivotComma = pivot.index(',')
+            pivotAccuracy = pivot[:indexOfPivotComma]
+            pivot_accuracy_number = float(pivotAccuracy)
+            if x_accuracy_number < pivot_accuracy_number:
+                less.append(x)
+            if x_accuracy_number == pivot_accuracy_number:
+                equal.append(x)
+            if x_accuracy_number > pivot_accuracy_number:
+                greater.append(x)
+        return sort(less)+equal+sort(greater)
+    else:
+        return string_array

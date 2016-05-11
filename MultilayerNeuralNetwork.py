@@ -242,6 +242,7 @@ class MultilayerNeuralNetwork(object):
 
         filename = "results/" + classifier + "/" + str(self.hidden) + "/" + str(self.iterations) + "/" + str(self.learning_rate) + "/" + str(self.momentum) + "/" + str(self.rate_decay) + "/results.txt"
         filename_user_friendly = "results/" + classifier + "/" + str(self.hidden) + "/" + str(self.iterations) + "/" + str(self.learning_rate) + "/" + str(self.momentum) + "/" + str(self.rate_decay) + "/results_user_friendly.txt"
+        allResultsFileName = "all_results.txt"
 
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         os.makedirs(os.path.dirname(filename_user_friendly), exist_ok=True)
@@ -267,6 +268,13 @@ class MultilayerNeuralNetwork(object):
             f.write(precision_not_high_fives + "\n")
             f.write(recall_high_fives + "\n")
             f.write(recall_not_high_fives + "\n")
+        f.close()
+
+        with open(allResultsFileName, "a") as f:
+            f.write(accuracy + ", " + precision_high_fives + ", " + precision_not_high_fives + ", " + recall_high_fives + ", " + recall_not_high_fives + ", " + classifier + "/" + str(self.hidden) + "/" + str(self.iterations) + "/" + str(self.learning_rate) + "/" + str(self.momentum) + "/" + str(self.rate_decay) + "\n")
+            #firstLine = f.readline()
+            #indexOfFirstComma = firstLine.index(',')
+            #highestAccuracy = firstLine[:indexOfFirstComma]
         f.close()
 
     def test(self, test_data, classifier):
