@@ -1,0 +1,5 @@
+Accuracy: 0.7
+Precision (high fives): 1.0
+Precision (not high fives): 0.6896551724137931
+Recall (high fives): 0.1
+Recall (not high fives): 1.0
