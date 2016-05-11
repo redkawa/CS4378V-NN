@@ -57,9 +57,10 @@ def gather_statistics():
 
     start = time.time()
 
-    with open("all_results.txt", "w") as f:
-        f.write() #clear out previous results
-    f.close()
+    #with open("all_results.txt", "w") as f:
+        #f.write() #clear out previous results
+    #f.close()
+
 
     # - Neural Network classifier: 900 inputs (1x1 grid)
     print("Begin: Neural Network classifier: 900 inputs (1x1 grid) - takes 11.5 min on Josh's macbook")
@@ -223,9 +224,10 @@ def gather_statistics():
 
     Bayes.run_bayes()
 
-    end = time.time()
+
     print("Time it took to compute Naive Bayes: " + str(end - start_bayes))
 
+    end = time.time()
     sortAux()
 
     print("Time it took TOTAL to gather stats: " + str(end - start))
@@ -233,13 +235,13 @@ def gather_statistics():
 def sortAux(file_name = "all_results.txt"):
 
     string_array = []
-    with open(file_name, "w+") as f:
+    with open(file_name, "r") as f:
         for line in f:
             string_array.append(line)
 
     sorted_string_array = sort(string_array)
 
-    with open(file_name, "w") as f:
+    with open("all_results_copy.txt", "w") as f:
         length = len(sorted_string_array)
         for i in range(length):
             f.write(sorted_string_array[length - (1 + i)])
