@@ -30,58 +30,51 @@ class MultilayerNeuralNetwork(object):
         self.momentum = momentum
         self.rate_decay = rate_decay
 
-        # set up array of 1s for activations
-        self.ai = np.ones(self.input)
-        self.ah = np.ones(self.hidden)
-        self.ao = np.ones(self.output)
+        # Set up all activations with 1's
+        self.activations_input = np.ones(self.input)
+        self.activations_hidden = np.ones(self.hidden)
+        self.activations_output = np.ones(self.output)
 
-        # create randomized weights
-        # use scheme from Efficient Backprop by LeCun 1998 to initialize weights for hidden layer
-        input_range = 1.0 / self.input ** (1/2)
-        self.wi = np.random.normal(loc = 0, scale = input_range, size = (self.input, self.hidden))
-        self.wo = np.random.uniform(size = (self.hidden, self.output)) / np.sqrt(self.hidden)
+        # Initialize with random weights
+        self.weights_input = np.random.normal(loc = 0, scale = (1.0 / self.input ** (1/2)), size = (self.input, self.hidden))
+        self.weights_output = np.random.uniform(size = (self.hidden, self.output)) / np.sqrt(self.hidden)
 
-        # create arrays of 0 for changes
-        # this is essentially an array of temporary values that gets updated at each iteration
-        # based on how much the weights need to change in the following iteration
-        self.ci = np.zeros((self.input, self.hidden))
-        self.co = np.zeros((self.hidden, self.output))
+        # Create an array of changes to weights (set to 0, for now)
+        self.changes_to_inputs = np.zeros((self.input, self.hidden))
+        self.changes_to_outputs = np.zeros((self.hidden, self.output))
 
     def feed_forward(self, inputs):
         #print("Length of inputs: " + str(len(inputs)))
         #print("Length of self.input - 1: " + str(self.input - 1))
         if len(inputs) != self.input-1:
-            raise ValueError('Wrong number of inputs you silly goose!')
+            raise ValueError('The amount of X Values in the list of arrays is wrong.')
 
-        self.ai[0:self.input -1] = inputs
+        self.activations_input[0:self.input -1] = inputs
+        self.activations_hidden = sigmoid(np.dot(self.weights_input.T, self.activations_input))
+        self.activations_output = sigmoid(np.dot(self.weights_output.T, self.activations_hidden))
 
-        sum = np.dot(self.wi.T, self.ai)
-        self.ah = sigmoid(sum)
+        return self.activations_output
 
-        sum = np.dot(self.wo.T, self.ah)
-        self.ao = sigmoid(sum)
-
-        return self.ao
-
-    def backPropagate(self, targets):
+    def back_propagate(self, targets):
         if len(targets) != self.output:
-            raise ValueError('Wrong number of targets you silly goose!')
+            raise ValueError('The amount of X Values in the list of arrays is wrong.')
 
-        output_deltas = derivative_of_sigmoid(self.ao) * -(targets - self.ao)
-        error = np.dot(self.wo, output_deltas)
-        hidden_deltas = derivative_of_sigmoid(self.ah) * error
+        changes_to_output = derivative_of_sigmoid(self.activations_output) * -(targets - self.activations_output)
+        changes_to_hidden = derivative_of_sigmoid(self.activations_hidden) * np.dot(self.weights_output, changes_to_output)
 
         # Update Weights: Hidden --> Output
-        change = output_deltas * np.reshape(self.ah, (self.ah.shape[0],1))
-        self.wo -= self.learning_rate * change + self.co * self.momentum
-        self.co = change
+        change = changes_to_output * np.reshape(self.activations_hidden, (self.activations_hidden.shape[0],1))
+
+        self.weights_output -= self.learning_rate * change + self.changes_to_outputs * self.momentum
+        self.changes_to_outputs = change
 
         # Update Weights: Input --> Hidden
-        change = hidden_deltas * np.reshape(self.ai, (self.ai.shape[0], 1))
-        self.wi -= self.learning_rate * change + self.ci * self.momentum
-        self.ci = change
+        change = changes_to_hidden * np.reshape(self.activations_input, (self.activations_input.shape[0], 1))
 
-        return sum(0.5 * (targets - self.ao)**2) # Returns the error
+        self.weights_input -= self.learning_rate * change + self.changes_to_inputs * self.momentum
+        self.changes_to_inputs = change
+
+        return sum(0.5 * (targets - self.activations_output)**2) # Returns the error
 
     def get_accuracy(self, test_data):
 
@@ -233,9 +226,9 @@ class MultilayerNeuralNetwork(object):
 
         self.writeResults(test_data, classifier)
 
-    def fit(self, patterns):
+    def fit(self, training_data):
 
-        num_example = np.shape(patterns)[0]
+        num_example = np.shape(training_data)[0]
         #print(np.shape(patterns)[0])
 
         writeError('\nBeginning of Errors: \n')
@@ -243,13 +236,13 @@ class MultilayerNeuralNetwork(object):
         for i in range(self.iterations):
 
             error = 0.0
-            random.shuffle(patterns)
+            random.shuffle(training_data)
 
-            for p in patterns:
-                inputs = p[0]
-                targets = p[1]
+            for data_point in training_data:
+                inputs = data_point[0]
+                outputs = data_point[1]
                 self.feed_forward(inputs)
-                error += self.backPropagate(targets)
+                error += self.back_propagate(outputs)
 
             writeError(str(error) + '\n')
 
@@ -261,13 +254,10 @@ class MultilayerNeuralNetwork(object):
             self.learning_rate = self.learning_rate * (self.learning_rate / (self.learning_rate + (self.learning_rate * self.rate_decay)))
         writeError()
 
-    def predict(self, X):
-        """
-        return list of predictions after training algorithm
-        """
+    def predict(self, inputs):
         predictions = []
-        for p in X:
-            predictions.append(self.feed_forward(p))
+        for input in inputs:
+            predictions.append(self.feed_forward(input))
         return predictions
 
 def writeError(data = '\n'):
